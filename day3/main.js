@@ -7,16 +7,19 @@ const capitalLetters = [...Array(26)].map((val, i) => String.fromCharCode(i + 65
 
 const alphabet = [...smallLetters, ...capitalLetters];
 
-// Part 1
-(async function processLineByLinePart1() {
+(async function processLineByLine() {
 
     let totalValue = 0;
+    let totalValueGrouped = 0;
 
     try {
         const rl = readline.createInterface({
             input: fs.createReadStream('InputFile.txt'),
             crlfDelay: Infinity
         });
+
+        let index = 0;
+        let group = [];
 
         rl.on('line', (result) => {
 
@@ -35,36 +38,11 @@ const alphabet = [...smallLetters, ...capitalLetters];
                 }
             }
 
-            totalValue += alphabet.findIndex(letter => sameValues.has(letter)) + 1;
-        });
-        await events.once(rl, 'close');
-    } catch (err) {
-        console.error(err);
-    }
-
-    console.log(`Total value of priorities: ${totalValue}`);
-})();
-// Part 2
-(async function processLineByLinePart2() {
-
-    let totalValue = 0;
-
-    try {
-        const rl = readline.createInterface({
-            input: fs.createReadStream('InputFile.txt'),
-            crlfDelay: Infinity
-        });
-
-        let index = 0;
-        let group = [];
-
-        rl.on('line', (result) => {
-
             group.push(result);
             index++;
 
             if (index === 3) {
-                const sameValues = new Set();
+                const sameValuesGrouped = new Set();
 
                 const firstBag = group[0];
                 const secondBag = group[1];
@@ -74,22 +52,26 @@ const alphabet = [...smallLetters, ...capitalLetters];
                     for (let j =0; j < secondBag.length; j++) {
                         for (let l = 0; l < thirdBag.length; l++) {
                             if (firstBag[i] === secondBag[j] && secondBag[j] === thirdBag[l]) {
-                                sameValues.add(firstBag[i]);
+                                sameValuesGrouped.add(firstBag[i]);
                             }
                         }
                     }
                 }
 
-                totalValue += alphabet.findIndex(letter => sameValues.has(letter)) + 1;
+                totalValueGrouped += alphabet.findIndex(letter => sameValues.has(letter)) + 1;
 
                 index = 0;
                 group = [];
             }
+
+            totalValue += alphabet.findIndex(letter => sameValues.has(letter)) + 1;
         });
         await events.once(rl, 'close');
     } catch (err) {
         console.error(err);
     }
 
-    console.log(`Total value of priorities in groups: ${totalValue}`);
+    console.log(`Total value of priorities: ${totalValue}`);
+    console.log(`Total value of priorities in groups: ${totalValueGrouped}`);
+
 })();
