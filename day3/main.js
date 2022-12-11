@@ -66,8 +66,6 @@ const alphabet = [...smallLetters, ...capitalLetters];
             if (index === 3) {
                 const sameValues = new Set();
 
-                console.log(group);
-
                 const firstBag = group[0];
                 const secondBag = group[1];
                 const thirdBag = group[2];
